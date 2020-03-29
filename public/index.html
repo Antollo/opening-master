@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Anime openings quiz app.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Opening master</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+</head>
+
+<body>
+    <header class="sticky">
+        <a href="#" class="logo" style="margin-left: 1rem;">Opening master</a>
+    </header>
+    <button class="primary circular" onclick="location.href = 'https://github.com/Antollo/opening-master'"
+        style="position: fixed; bottom: 3vh; right: 3vw; height:50px; width:50px; font-size: 25px; line-height: 1; padding-left: 10px; z-index: 9999;"><span
+            class="icon-help inverse"></span>
+    </button>
+    <div class="spinner primary" id="spinner" style="position: fixed; bottom: 50vh; right: 50vw; z-index: 9999;">
+    </div>
+
+    <div class="container" style="padding-bottom: 76px;">
+        <div class="row">
+            <div class="col-sm" id="app">
+                <h3>Welcome dear weeb!</h3>
+
+                <h5>App description</h5>
+                <p>
+                    The idea for this app was born when Youtube reccomended me anime openings quiz.
+                    Actually, I didn't know some of ones marked as easy (because I didn't watch these animes) but I knew
+                    a bunch of openings marked as hard. I came to conclusion that there are no easy and hard ones, there
+                    are those you have listened to and the rest. Then I created this app that knows what you have
+                    watched and makes personelized quiz.
+                </p>
+                <h5>Enjoy!</h5>
+
+                <form id="form">
+                    <fieldset>
+                        <legend>Import data from My Anime List using exported XML file</legend>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <label for="fileInput" class="button">Choose file</label>
+                                <input type="file" id="fileInput" name="fileInput" accept="application/xml" hidden>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <h4>or</h4>
+                    <fieldset>
+                        <legend>Import data from My Anime List using username</legend>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <label for="username">MAL username</label>
+                                <input type="text" id="username" name="username" placeholder="Username" />
+                            </div>
+                            <div class="col-sm-12 col-md-6">
+                                <input type="submit" id="start" value="Get data directly from MAL">
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+
+                <div class="card fluid" id="testCard">
+                    <div class="section">
+                        <h3 class="doc" id="testHeader"></h3>
+                        <p class="doc" style="text-align: right;"><mark class="primary" id="testResult">tag</mark></p>
+                        <p class="doc" id="testContent"></p>
+                        <div class="doc row">
+                            <div class="col-sm-24 col-md-12" style="flex-grow: 1;">
+                                <div class="collapse" id="testHint">
+                                    <input type="checkbox" id="collapse-section" aria-hidden="true">
+                                    <label class="collapse-section-label" for="collapse-section" aria-hidden="true"
+                                        style="display: block;">Hint</label>
+                                    <div>
+                                        <p id="testHintText"></p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-24 col-md-12">
+                                <p class="audioHolder">
+                                    <audio controls autoplay id="testAudio">
+                                        Your browser does not support the <code>audio</code> element.
+                                    </audio>
+                                </p>
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <label for="testTitle">Anime title</label>
+                                <input type="text" id="testTitle" name="testTitle" placeholder="Title" />
+                            </div>
+
+                            <div class="col-sm-12 col-md-6">
+                                <button id="testSubmit" class="button">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer style="position: fixed; bottom: 0; width: 100%; box-sizing: border-box; padding: var(--universal-padding);">
+        <p>2020 Antoni Nowinowski</p>
+    </footer>
+</body>
+
+<script type="module" src="app.js"></script>
+<style>
+    body {
+        --audio-height: 54px;
+    }
+
+    @-moz-document url-prefix() {
+        body {
+            --audio-height: 40px !important;
+        }
+    }
+
+    .collapse-section-label {
+        height: calc(var(--audio-height) - 2 * 1.5 * var(--universal-padding)) !important;
+        line-height: calc(var(--audio-height) - 2 * 1.5 * var(--universal-padding)) !important;
+        border: none !important;
+    }
+
+    :focus {
+        outline: 0;
+    }
+
+    audio,
+    .audioHolder {
+        height: var(--audio-height);
+        background-color: var(--collapse-label-back-color);
+        border-radius: var(--universal-border-radius);
+    }
+
+    audio {
+        width: 100%;
+    }
+
+    audio::-webkit-media-controls-panel {
+        background-color: var(--collapse-label-back-color);
+    }
+
+    input[type="text"] {
+        margin: 8px;
+    }
+</style>
+
+
+</html>

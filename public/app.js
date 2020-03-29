@@ -1,0 +1,125 @@
+async function animeInfo(title) {
+    let result = { name: 'undefined', id: -1 }
+    spinner.style.display = 'block'
+    try {
+        if (typeof title == 'string' && title.length)
+            result = await fetch(`/api/anime-info/${encodeURIComponent(title)}`, {
+                method: 'GET'
+            }).then(res => res.json())
+    }
+    catch (err) {
+        console.error(err);
+    }
+    spinner.style.display = 'none'
+    return result
+}
+
+async function animeList(user) {
+    let result = []
+    spinner.style.display = 'block'
+    try {
+        if (typeof user == 'string' && user.length)
+            result = await fetch(`/api/anime-list/${encodeURIComponent(user)}`, {
+                method: 'GET'
+            }).then(res => res.json())
+    }
+    catch (err) {
+        console.error(err);
+    }
+    spinner.style.display = 'none'
+    return result
+}
+
+function getDataFromFileInput(event) {
+    spinner.style.display = 'block'
+    const reader = new FileReader()
+    reader.onload = event => {
+        const parser = new DOMParser()
+        const doc = parser.parseFromString(event.target.result, 'application/xml')
+        const titles = Array.from(doc.getElementsByTagName('anime')).filter(el => {
+            return el.getElementsByTagName('my_status')[0].textContent == 'Completed'
+        }).map(el => {
+            return {
+                id: Number.parseInt(el.getElementsByTagName('series_animedb_id')[0].textContent),
+                name: el.getElementsByTagName('series_title')[0].textContent
+            }
+        })
+        spinner.style.display = 'none'
+        startTest(titles)
+    }
+    reader.readAsText(event.target.files[0])
+}
+
+async function getDataUsingUsername(event) {
+    event.preventDefault()
+    const formData = new FormData(event.target)
+    const titles = await animeList(formData.get('username'))
+    startTest(titles)
+}
+
+const fileInput = document.getElementById('fileInput')
+const form = document.getElementById('form')
+const spinner = document.getElementById('spinner')
+const testCard = document.getElementById('testCard')
+const testTitle = document.getElementById('testTitle')
+const testSubmit = document.getElementById('testSubmit')
+const testHeader = document.getElementById('testHeader')
+const testContent = document.getElementById('testContent')
+const testAudio = document.getElementById('testAudio')
+const testHintText = document.getElementById('testHintText')
+const testHint = document.getElementById('testHint')
+const testResult = document.getElementById('testResult')
+form.style.display = 'block'
+testCard.style.display = 'none'
+
+async function submit() {
+    await new Promise(resolve => {
+        testSubmit.onclick = () => resolve()
+        testTitle.onkeydown = ev => {
+            if (ev.key == 'Enter')
+                resolve()
+        }
+    })
+}
+
+async function startTest(titles) {
+    for (let i = titles.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [titles[i], titles[j]] = [titles[j], titles[i]]
+    }
+    let correct = 0;
+    testResult.textContent = `Done: ${0}, Correct: ${correct}, Total: ${titles.length}`
+    form.style.display = 'none'
+    testSubmit.disabled = false
+    testCard.style.display = 'block'
+    for (let i = 0; i < titles.length; i++) {
+        testHeader.textContent = `Question ${i + 1}`
+        testSubmit.textContent = 'Submit'
+        testHintText.textContent = `${titles[i].name.substr(0, 2)}...`
+        spinner.style.display = 'block'
+        testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
+        testContent.style.display = 'none'
+        testHint.style.display = 'block'
+        await submit()
+        const info = await animeInfo(testTitle.value)
+        testHint.style.display = 'none'
+        testContent.style.display = 'block'
+        testTitle.value = ''
+        if (info.id == titles[i].id)
+            testContent.innerHTML = `<mark class="tertiary">OK</mark><br>Full title is <code>${titles[i].name}</code>`, correct++
+        else
+            testContent.innerHTML = `<mark class="secondary">NOT OK</mark><br>Your answear was <code>${info.name}</code>
+                <br>Correct title is <code>${titles[i].name}</code>`
+        testSubmit.textContent = 'Next'
+        testResult.textContent = `Done: ${i + 1}, Correct: ${correct}, Total: ${titles.length}`
+        await submit()
+    }
+    testCard.style.display = 'block'
+    form.style.display = 'block'
+    testSubmit.disabled = true
+}
+
+fileInput.onchange = getDataFromFileInput
+form.onsubmit = getDataUsingUsername
+testAudio.onloadeddata = () => spinner.style.display = 'none'
+window.onload = () => spinner.style.display = 'none'

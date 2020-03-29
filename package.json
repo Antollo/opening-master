@@ -1,0 +1,21 @@
+{
+    "name": "opening-master",
+    "version": "1.0.0",
+    "description": "Anime openings quiz app.",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Antoni Nowinowski",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1",
+        "express-validator": "^6.4.0",
+        "ffmpeg-static": "^4.0.1",
+        "mal-scraper": "^2.6.8",
+        "path": "^0.12.7",
+        "youtube-audio-stream": "^0.3.5",
+        "youtube-search": "^1.1.4"
+    },
+    "devDependencies": {}
+}
