@@ -19,7 +19,8 @@
         style="position: fixed; bottom: 3vh; right: 3vw; height:50px; width:50px; font-size: 25px; line-height: 1; padding-left: 10px; z-index: 9999;"><span
             class="icon-help inverse"></span>
     </button>
-    <div class="spinner primary" id="spinner" style="position: fixed; bottom: 50vh; right: 50vw; z-index: 9999;">
+    <div class="spinner primary" id="spinner"
+        style="width: 1.75rem; height: 1.75rem; position: fixed; top: calc(50vh - 1.75rem/2); right: calc(50vw - 1.75rem/2); margin: 0; box-sizing: border-box; z-index: 9999;">
     </div>
 
     <div class="container" style="padding-bottom: 76px;">
@@ -80,8 +81,8 @@
                             </div>
 
                             <div class="col-sm-24 col-md-12">
-                                <p class="audioHolder">
-                                    <audio controls autoplay id="testAudio">
+                                <p class="audioHolder" style="display: flex; flex-grow: 1;">
+                                    <audio controls autoplay id="testAudio" style="display: flex; flex-grow: 1;">
                                         Your browser does not support the <code>audio</code> element.
                                     </audio>
                                 </p>
@@ -134,10 +135,6 @@
         height: var(--audio-height);
         background-color: var(--collapse-label-back-color);
         border-radius: var(--universal-border-radius);
-    }
-
-    audio {
-        width: 100%;
     }
 
     audio::-webkit-media-controls-panel {
