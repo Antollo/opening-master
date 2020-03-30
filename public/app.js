@@ -1,5 +1,5 @@
 async function animeInfo(title) {
-    let result = { name: 'empty', id: -1 }
+    let result = [{ name: 'empty', id: -1 }]
     spinner.style.display = 'block'
     try {
         if (typeof title == 'string' && title.length)
@@ -111,15 +111,16 @@ async function startTest(titles) {
         await submit()
         const info = await animeInfo(testTitle.value)
         testHint.style.display = 'none'
-        testTitle.value = ''
-        if (info.id == titles[i].id)
+        const result = info.find(el => el.id == titles[i].id)
+        if (result)
             testContent.innerHTML = `<mark class="tertiary">OK</mark><br>Full title is <code>${titles[i].name}</code>.`, correct++
         else
-            testContent.innerHTML = `<mark class="secondary">NOT OK</mark><br>Your answear was <code>${info.name}</code>,
+            testContent.innerHTML = `<mark class="secondary">NOT OK</mark><br>Your answear was <code>${info[0].name}</code>,
                 correct title is <code>${titles[i].name}</code>.`
         testSubmit.textContent = 'Next'
         testResult.textContent = `Done: ${i + 1}, Correct: ${correct}, Total: ${titles.length}`
         await submit()
+        testTitle.value = ''
     }
     testCard.style.display = 'block'
     form.style.display = 'block'

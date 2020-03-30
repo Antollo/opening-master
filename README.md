@@ -14,13 +14,20 @@ watched and makes personelized quiz.
 
 `KEY` environmental variable - Youtube Data API key
 
-## Example of minimal supported XML file
+## Example of supported XML file
 
 ```xml
-<anime>
-    <series_animedb_id>30276</series_animedb_id>
-    <series_title>One Punch Man</series_title>
-    <my_status>Completed</my_status>
-</anime>
+<myanimelist>
+    <anime>
+        <series_animedb_id>30276</series_animedb_id>
+        <series_title>One Punch Man</series_title>
+        <my_status>Completed</my_status>
+    </anime>
+    <anime>
+        <series_animedb_id>32615</series_animedb_id>
+        <series_title>Youjo Senki</series_title>
+        <my_status>Completed</my_status>
+    </anime>
+</myanimelist>
 ```
 

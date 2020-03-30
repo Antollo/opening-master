@@ -14,6 +14,7 @@
         "ffmpeg-static": "^4.0.1",
         "mal-scraper": "^2.6.8",
         "path": "^0.12.7",
+        "scrape-youtube": "0.0.9",
         "youtube-audio-stream": "^0.3.5",
         "youtube-search": "^1.1.4"
     },
