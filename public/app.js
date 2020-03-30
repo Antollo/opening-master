@@ -1,5 +1,5 @@
 async function animeInfo(title) {
-    let result = { name: 'undefined', id: -1 }
+    let result = { name: 'empty', id: -1 }
     spinner.style.display = 'block'
     try {
         if (typeof title == 'string' && title.length)
@@ -67,6 +67,7 @@ const testHeader = document.getElementById('testHeader')
 const testContent = document.getElementById('testContent')
 const testAudio = document.getElementById('testAudio')
 const testHintText = document.getElementById('testHintText')
+const testHintCheckbox = document.getElementById('testHintCheckbox')
 const testHint = document.getElementById('testHint')
 const testResult = document.getElementById('testResult')
 form.style.display = 'block'
@@ -83,10 +84,16 @@ async function submit() {
 }
 
 async function startTest(titles) {
-    for (let i = titles.length - 1; i > 0; i--) {
+    titles = titles.map((a) => ({ sortKey: Math.random(), value: a }))
+        .sort((a, b) => a.sortKey - b.sortKey)
+        .map((a) => a.value)
+
+    // I don't know the proof of Fisher–Yates shuffle algorithm
+    // so I won't use it for now.
+    /*for (let i = titles.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [titles[i], titles[j]] = [titles[j], titles[i]]
-    }
+    }*/
     let correct = 0;
     testResult.textContent = `Done: ${0}, Correct: ${correct}, Total: ${titles.length}`
     form.style.display = 'none'
@@ -95,21 +102,21 @@ async function startTest(titles) {
     for (let i = 0; i < titles.length; i++) {
         testHeader.textContent = `Question ${i + 1}`
         testSubmit.textContent = 'Submit'
+        testHintCheckbox.checked = false
         testHintText.textContent = `${titles[i].name.substr(0, 2)}...`
         spinner.style.display = 'block'
         testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
-        testContent.style.display = 'none'
+        testContent.innerHTML = 'Good luck!<br>Click <code>hint</code> to see first 2 letters.'
         testHint.style.display = 'block'
         await submit()
         const info = await animeInfo(testTitle.value)
         testHint.style.display = 'none'
-        testContent.style.display = 'block'
         testTitle.value = ''
         if (info.id == titles[i].id)
-            testContent.innerHTML = `<mark class="tertiary">OK</mark><br>Full title is <code>${titles[i].name}</code>`, correct++
+            testContent.innerHTML = `<mark class="tertiary">OK</mark><br>Full title is <code>${titles[i].name}</code>.`, correct++
         else
-            testContent.innerHTML = `<mark class="secondary">NOT OK</mark><br>Your answear was <code>${info.name}</code>
-                <br>Correct title is <code>${titles[i].name}</code>`
+            testContent.innerHTML = `<mark class="secondary">NOT OK</mark><br>Your answear was <code>${info.name}</code>,
+                correct title is <code>${titles[i].name}</code>.`
         testSubmit.textContent = 'Next'
         testResult.textContent = `Done: ${i + 1}, Correct: ${correct}, Total: ${titles.length}`
         await submit()

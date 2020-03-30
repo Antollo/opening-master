@@ -9,11 +9,13 @@
     <title>Opening master</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 </head>
 
 <body>
     <header class="sticky">
-        <a href="#" class="logo" style="margin-left: 1rem;">Opening master</a>
+        <h2 href="#" class="logo" style="display: inline-block; margin: 0 0 0 1rem;">Opening master</h2>
     </header>
     <button class="primary circular" onclick="location.href = 'https://github.com/Antollo/opening-master'"
         style="position: fixed; bottom: 3vh; right: 3vw; height:50px; width:50px; font-size: 25px; line-height: 1; padding-left: 10px; z-index: 9999;"><span
@@ -28,7 +30,7 @@
             <div class="col-sm" id="app">
                 <h3>Welcome dear weeb!</h3>
 
-                <h5>App description</h5>
+                <h4>App description</h4>
                 <p>
                     The idea for this app was born when Youtube reccomended me anime openings quiz.
                     Actually, I didn't know some of ones marked as easy (because I didn't watch these animes) but I knew
@@ -36,7 +38,7 @@
                     are those you have listened to and the rest. Then I created this app that knows what you have
                     watched and makes personelized quiz.
                 </p>
-                <h5>Enjoy!</h5>
+                <h4>Enjoy!</h4>
 
                 <form id="form">
                     <fieldset>
@@ -69,10 +71,10 @@
                         <p class="doc" style="text-align: right;"><mark class="primary" id="testResult">tag</mark></p>
                         <p class="doc" id="testContent"></p>
                         <div class="doc row">
-                            <div class="col-sm-24 col-md-12" style="flex-grow: 1;">
+                            <div class="col-sm-12 col-md-6" style="flex-grow: 1;">
                                 <div class="collapse" id="testHint">
-                                    <input type="checkbox" id="collapse-section" aria-hidden="true">
-                                    <label class="collapse-section-label" for="collapse-section" aria-hidden="true"
+                                    <input id="testHintCheckbox" type="checkbox" aria-hidden="true">
+                                    <label class="collapse-section-label" for="testHintCheckbox" aria-hidden="true"
                                         style="display: block;">Hint</label>
                                     <div>
                                         <p id="testHintText"></p>
@@ -80,13 +82,15 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-24 col-md-12">
+                            <div class="col-sm-12 col-md-6">
                                 <p class="audioHolder" style="display: flex; flex-grow: 1;">
                                     <audio controls autoplay id="testAudio" style="display: flex; flex-grow: 1;">
                                         Your browser does not support the <code>audio</code> element.
                                     </audio>
                                 </p>
                             </div>
+                        </div>
+                        <div class="doc row">
 
                             <div class="col-sm-12 col-md-6">
                                 <label for="testTitle">Anime title</label>
@@ -112,6 +116,7 @@
 <style>
     body {
         --audio-height: 54px;
+        --universal-border-radius: 8px;
     }
 
     @-moz-document url-prefix() {
@@ -144,6 +149,20 @@
     input[type="text"] {
         margin: 8px;
     }
+
+    h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        legend {
+            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
+        }
+    
+        html, * {
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
+        }
 </style>
 
 
