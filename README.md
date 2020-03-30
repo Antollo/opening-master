@@ -18,8 +18,8 @@ watched and makes personelized quiz.
 
 ```xml
 <anime>
-	<series_animedb_id>30276</series_animedb_id>
-	<series_title>One Punch Man</series_title>
+    <series_animedb_id>30276</series_animedb_id>
+    <series_title>One Punch Man</series_title>
     <my_status>Completed</my_status>
 </anime>
 ```
