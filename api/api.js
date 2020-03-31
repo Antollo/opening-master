@@ -2,11 +2,16 @@ const router = require('express').Router()
 const { check, validationResult } = require('express-validator')
 const mal = require('mal-scraper')
 const stream = require('youtube-audio-stream')
-const search = require('youtube-search')
-const search2 = require("scrape-youtube").search
-let searchNotWorkingFallbackToSearch2 = false
+//const search = require('youtube-search')
+const search2 = require('scrape-youtube').search
+//let searchNotWorkingFallbackToSearch2 = false
 
-function searchPromisify(name) {
+function filterSearch(result) {
+    return result
+        .filter(el => el.duration > 30 && el.duration < 600)
+}
+
+/*function searchPromisify(name) {
     return new Promise((resolve, reject) => {
         try {
             search(`${name} opening`, {
@@ -25,17 +30,17 @@ function searchPromisify(name) {
             reject(err)
         }
     })
-}
+}*/
 
 async function search2Promisify(name) {
     try {
-        return (await search2(`${name} opening`, { limit: 1, type: "video" }))[0].link
+        return filterSearch(await search2(`${name} opening`, { limit: 4, type: "video" }))[0].link
     } catch (err) {
         try {
-            return (await search2(`${name} opening`, { limit: 1, type: "video" }))[0].link
+            return filterSearch(await search2(`${name} opening`, { limit: 4, type: "video" }))[0].link
         } catch (err) {
             try {
-                return (await search2(`${name} opening`, { limit: 1, type: "video" }))[0].link
+                return filterSearch(await search2(`${name} opening`, { limit: 4, type: "video" }))[0].link
             } catch (err) {
                 return err
             }
@@ -51,7 +56,7 @@ router.get('/anime-info/:title', [
         return res.status(422).json({ errors: errors.array() })
     console.log('anime-info', req.params.title)
     return res.status(200).json((await mal.getResultsFromSearch(req.params.title))
-        .slice(0, 3)
+        .slice(0, 4)
         .map(el => {
             return {
                 id: el.id,
@@ -67,8 +72,17 @@ router.get('/anime-list/:user', [
     if (!errors.isEmpty())
         return res.status(422).json({ errors: errors.array() })
     console.log('anime-list', req.params.user)
-    return res.status(200).json((await mal.getWatchListFromUser(req.params.user, 0, 'anime'))
-        .filter(el => el.status == 2)
+    let list = []
+    let tempList
+    let nextIndex = 0
+    do {
+        tempList = await mal.getWatchListFromUser(req.params.user, nextIndex, 'anime')
+        list = list.concat(tempList)
+        nextIndex += 300
+    } while (tempList.length == 300)
+    return res.status(200).json(list
+        .filter(el => (el.status == 1 || el.status == 2)
+            && (el.animeMediaTypeString == 'TV' || el.animeMediaTypeString == 'Movie'))
         .map(el => {
             return {
                 id: el.animeId,
@@ -85,7 +99,7 @@ router.get('/anime-opening/:name', [
         return res.status(422).json({ errors: errors.array() })
     console.log('anime-name', req.params.name)
     try {
-        let searchResult;
+        /*let searchResult
         if (searchNotWorkingFallbackToSearch2) {
             searchResult = await search2Promisify(req.params.name)
         } else {
@@ -95,7 +109,8 @@ router.get('/anime-opening/:name', [
                 searchNotWorkingFallbackToSearch2 = true
                 searchResult = await search2Promisify(req.params.name)
             }
-        }
+        }*/
+        const searchResult = await search2Promisify(req.params.name)
         console.log(searchResult)
         stream(searchResult).pipe(res)
     } catch (err) {

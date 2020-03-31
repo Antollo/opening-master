@@ -1,6 +1,6 @@
 async function animeInfo(title) {
     let result = [{ name: 'empty', id: -1 }]
-    spinner.style.display = 'block'
+    spinnerControl.checked = true
     try {
         if (typeof title == 'string' && title.length)
             result = await fetch(`/api/anime-info/${encodeURIComponent(title)}`, {
@@ -10,13 +10,13 @@ async function animeInfo(title) {
     catch (err) {
         console.error(err);
     }
-    spinner.style.display = 'none'
+    spinnerControl.checked = false
     return result
 }
 
 async function animeList(user) {
     let result = []
-    spinner.style.display = 'block'
+    spinnerControl.checked = true
     try {
         if (typeof user == 'string' && user.length)
             result = await fetch(`/api/anime-list/${encodeURIComponent(user)}`, {
@@ -26,25 +26,28 @@ async function animeList(user) {
     catch (err) {
         console.error(err);
     }
-    spinner.style.display = 'none'
+    spinnerControl.checked = false
     return result
 }
 
 function getDataFromFileInput(event) {
-    spinner.style.display = 'block'
+    spinnerControl.checked = true
     const reader = new FileReader()
     reader.onload = event => {
         const parser = new DOMParser()
         const doc = parser.parseFromString(event.target.result, 'application/xml')
         const titles = Array.from(doc.getElementsByTagName('anime')).filter(el => {
-            return el.getElementsByTagName('my_status')[0].textContent == 'Completed'
+            return (el.getElementsByTagName('my_status')[0].textContent == 'Completed'
+                || el.getElementsByTagName('my_status')[0].textContent == 'Watching')
+                && (el.getElementsByTagName('series_type')[0].textContent == 'TV'
+                    || el.getElementsByTagName('series_type')[0].textContent == 'Movie')
         }).map(el => {
             return {
                 id: Number.parseInt(el.getElementsByTagName('series_animedb_id')[0].textContent),
                 name: el.getElementsByTagName('series_title')[0].textContent
             }
         })
-        spinner.style.display = 'none'
+        spinnerControl.checked = false
         startTest(titles)
     }
     reader.readAsText(event.target.files[0])
@@ -59,7 +62,7 @@ async function getDataUsingUsername(event) {
 
 const fileInput = document.getElementById('fileInput')
 const form = document.getElementById('form')
-const spinner = document.getElementById('spinner')
+const spinnerControl = document.getElementById('spinnerControl')
 const testCard = document.getElementById('testCard')
 const testTitle = document.getElementById('testTitle')
 const testSubmit = document.getElementById('testSubmit')
@@ -70,8 +73,6 @@ const testHintText = document.getElementById('testHintText')
 const testHintCheckbox = document.getElementById('testHintCheckbox')
 const testHint = document.getElementById('testHint')
 const testResult = document.getElementById('testResult')
-form.style.display = 'block'
-testCard.style.display = 'none'
 
 async function submit() {
     await new Promise(resolve => {
@@ -104,9 +105,9 @@ async function startTest(titles) {
         testSubmit.textContent = 'Submit'
         testHintCheckbox.checked = false
         testHintText.textContent = `${titles[i].name.substr(0, 2)}...`
-        spinner.style.display = 'block'
+        spinnerControl.checked = true
         testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
-        testContent.innerHTML = 'Good luck!<br>Click <code>hint</code> to see first 2 letters.'
+        testContent.innerHTML = 'Good luck!<br>Click <code>Hint</code> to see first 2 letters.'
         testHint.style.display = 'block'
         await submit()
         const info = await animeInfo(testTitle.value)
@@ -129,5 +130,9 @@ async function startTest(titles) {
 
 fileInput.onchange = getDataFromFileInput
 form.onsubmit = getDataUsingUsername
-testAudio.onloadeddata = () => spinner.style.display = 'none'
-window.onload = () => spinner.style.display = 'none'
+testAudio.onplaying = () => spinnerControl.checked = false
+
+if (!localStorage.getItem('visited')) {
+    document.getElementById('modalControl').checked = true
+    localStorage.setItem('visited', true)
+}

@@ -21,11 +21,19 @@ watched and makes personelized quiz.
     <anime>
         <series_animedb_id>30276</series_animedb_id>
         <series_title>One Punch Man</series_title>
+        <series_type>TV</series_type>
         <my_status>Completed</my_status>
     </anime>
     <anime>
         <series_animedb_id>32615</series_animedb_id>
         <series_title>Youjo Senki</series_title>
+        <series_type>TV</series_type>
+        <my_status>Watching</my_status>
+    </anime>
+    <anime>
+        <series_animedb_id>32281</series_animedb_id>
+        <series_title>Kimi no Na wa.</series_title>
+        <series_type>Movie</series_type>
         <my_status>Completed</my_status>
     </anime>
 </myanimelist>
