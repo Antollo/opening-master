@@ -1,52 +1,7 @@
 const router = require('express').Router()
 const { check, validationResult } = require('express-validator')
 const mal = require('mal-scraper')
-const stream = require('youtube-audio-stream')
-//const search = require('youtube-search')
-const search2 = require('scrape-youtube').search
-//let searchNotWorkingFallbackToSearch2 = false
-
-function filterSearch(result) {
-    return result
-        .filter(el => el.duration > 30 && el.duration < 600)
-}
-
-/*function searchPromisify(name) {
-    return new Promise((resolve, reject) => {
-        try {
-            search(`${name} opening`, {
-                key: process.env.KEY,
-                maxResults: 1,
-                type: 'video',
-                topicId: '/m/04rlf'
-            }, (err, results) => {
-                if (err)
-                    reject(err)
-                if (results && results.length && results[0].url)
-                    resolve(results[0].url)
-                reject(results)
-            })
-        } catch (err) {
-            reject(err)
-        }
-    })
-}*/
-
-async function search2Promisify(name) {
-    try {
-        return filterSearch(await search2(`${name} opening`, { limit: 4, type: "video" }))[0].link
-    } catch (err) {
-        try {
-            return filterSearch(await search2(`${name} opening`, { limit: 4, type: "video" }))[0].link
-        } catch (err) {
-            try {
-                return filterSearch(await search2(`${name} opening`, { limit: 4, type: "video" }))[0].link
-            } catch (err) {
-                return err
-            }
-        }
-    }
-}
+const stream = require('./stream')
 
 router.get('/anime-info/:title', [
     check('title').isString().not().isEmpty()
@@ -99,25 +54,11 @@ router.get('/anime-opening/:name', [
         return res.status(422).json({ errors: errors.array() })
     console.log('anime-name', req.params.name)
     try {
-        /*let searchResult
-        if (searchNotWorkingFallbackToSearch2) {
-            searchResult = await search2Promisify(req.params.name)
-        } else {
-            try {
-                searchResult = await searchPromisify(req.params.name)
-            } catch (err) {
-                searchNotWorkingFallbackToSearch2 = true
-                searchResult = await search2Promisify(req.params.name)
-            }
-        }*/
-        const searchResult = await search2Promisify(req.params.name)
-        console.log(searchResult)
-        stream(searchResult).pipe(res)
+        (await stream(req.params.name)).pipe(res)
     } catch (err) {
         console.error(err)
         res.status(500).send(err)
     }
 })
-
 
 module.exports = router

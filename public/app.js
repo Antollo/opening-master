@@ -106,9 +106,17 @@ async function startTest(titles) {
         testHintCheckbox.checked = false
         testHintText.textContent = `${titles[i].name.substr(0, 2)}...`
         spinnerControl.checked = true
-        testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
         testContent.innerHTML = 'Good luck!<br>Click <code>Hint</code> to see first 2 letters.'
         testHint.style.display = 'block'
+
+        await new Promise(resolve => {
+            testAudio.onplaying = () => {
+                spinnerControl.checked = false
+                resolve()
+            }
+            testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
+        })
+
         await submit()
         const info = await animeInfo(testTitle.value)
         testHint.style.display = 'none'
@@ -130,7 +138,6 @@ async function startTest(titles) {
 
 fileInput.onchange = getDataFromFileInput
 form.onsubmit = getDataUsingUsername
-testAudio.onplaying = () => spinnerControl.checked = false
 
 if (!localStorage.getItem('visited')) {
     document.getElementById('modalControl').checked = true

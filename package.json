@@ -9,6 +9,7 @@
     "author": "Antoni Nowinowski",
     "license": "ISC",
     "dependencies": {
+        "events": "^3.1.0",
         "express": "^4.17.1",
         "express-validator": "^6.4.0",
         "ffmpeg-static": "^4.0.1",
