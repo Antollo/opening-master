@@ -1,7 +1,7 @@
 const ytStream = require('youtube-audio-stream')
 const ytSearch = require('scrape-youtube').search
-const events = require('events')
-const eventEmitter = new events.EventEmitter()
+const { EventEmitter } = require('events')
+const eventEmitter = new EventEmitter()
 eventEmitter.setMaxListeners(64)
 let counter = 4
 
@@ -11,9 +11,16 @@ function filterSearchResults(results) {
         .filter(el => el.title.toLowerCase().indexOf('trailer') == -1)
 }
 
+function transformName(name) {
+    return encodeURIComponent(name
+        .replace('××', ' xx')
+        .replace('♭', ' season 2')
+    )
+}
+
 async function search(name, errorDepth = 3) {
     try {
-        const results = await ytSearch(`${encodeURIComponent(name)} opening`, { limit: 4, type: 'video' })
+        const results = await ytSearch(`${transformName(name)} opening`, { limit: 4, type: 'video' })
         return filterSearchResults(results)[0].link
     } catch (err) {
         if (errorDepth == 0)
@@ -45,11 +52,17 @@ async function leave() {
 
 async function stream(name) {
     await enter()
-    const searchResult = await search(name)
-    console.log(searchResult)
-    const streamResult = ytStream(searchResult)
-    setTimeout(leave, 2000)
-    return streamResult
+    try {
+        const searchResult = await search(name)
+        console.log(searchResult)
+        const streamResult = ytStream(searchResult)
+        setTimeout(leave, 2000)
+        return streamResult
+    } catch (err) {
+        setTimeout(leave, 2000)
+        console.log(err)
+        throw err
+    }
 }
 
 module.exports = stream

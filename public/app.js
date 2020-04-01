@@ -8,7 +8,8 @@ async function animeInfo(title) {
             }).then(res => res.json())
     }
     catch (err) {
-        console.error(err);
+        console.error(err)
+        result[0].name = 'server error'
     }
     spinnerControl.checked = false
     return result
@@ -24,7 +25,7 @@ async function animeList(user) {
             }).then(res => res.json())
     }
     catch (err) {
-        console.error(err);
+        console.error(err)
     }
     spinnerControl.checked = false
     return result
@@ -109,13 +110,22 @@ async function startTest(titles) {
         testContent.innerHTML = 'Good luck!<br>Click <code>Hint</code> to see first 2 letters.'
         testHint.style.display = 'block'
 
-        await new Promise(resolve => {
+        const err = await new Promise(resolve => {
             testAudio.onplaying = () => {
-                spinnerControl.checked = false
-                resolve()
+                resolve(false)
             }
+            testAudio.onerror = () => {
+                resolve(true)
+            }
+            setTimeout( () => {
+                resolve(true)
+            }, 6000)
             testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
         })
+        spinnerControl.checked = false
+
+        if (err)
+            continue;
 
         await submit()
         const info = await animeInfo(testTitle.value)
