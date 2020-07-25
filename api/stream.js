@@ -1,5 +1,5 @@
 const ytStream = require('youtube-audio-stream')
-const ytSearch = require('scrape-youtube').search
+const ytSearch = require('scrape-yt').search
 const { EventEmitter } = require('events')
 const eventEmitter = new EventEmitter()
 eventEmitter.setMaxListeners(64)
@@ -21,7 +21,8 @@ function transformName(name) {
 async function search(name, errorDepth = 3) {
     try {
         const results = await ytSearch(`${transformName(name)} opening`, { limit: 4, type: 'video' })
-        return filterSearchResults(results)[0].link
+        console.log(results)
+        return `https://www.youtube.com/watch?v=${filterSearchResults(results)[0].id}`
     } catch (err) {
         if (errorDepth == 0)
             throw err

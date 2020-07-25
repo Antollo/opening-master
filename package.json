@@ -9,14 +9,15 @@
     "author": "Antoni Nowinowski",
     "license": "ISC",
     "dependencies": {
-        "events": "^3.1.0",
+        "events": "^3.2.0",
         "express": "^4.17.1",
-        "express-validator": "^6.4.0",
-        "ffmpeg-static": "^4.0.1",
-        "mal-scraper": "^2.6.8",
+        "express-validator": "^6.6.0",
+        "ffmpeg-static": "^4.2.6",
+        "google-images": "^2.1.0",
+        "mal-scraper": "^2.7.1",
         "path": "^0.12.7",
-        "scrape-youtube": "0.0.9",
-        "youtube-audio-stream": "^0.3.5",
+        "scrape-yt": "^1.4.1",
+        "youtube-audio-stream": "^0.3.6",
         "youtube-search": "^1.1.4"
     },
     "devDependencies": {}
