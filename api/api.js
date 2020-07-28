@@ -48,11 +48,12 @@ router.get('/anime-list/:user', [
 
         res.status(200).json(list
             .filter(el => (el.status == 1 || el.status == 2)
-                && el.animeMediaTypeString == 'TV')
+                && (el.animeMediaTypeString == 'TV' || el.animeMediaTypeString == 'Movie'))
             .map(el => {
                 return {
                     id: el.animeId,
-                    name: el.animeTitle
+                    name: el.animeTitle,
+                    mediaType: el.animeMediaTypeString
                 }
             }))
     } catch (err) {

@@ -14,7 +14,8 @@ function getDataFromFileInput(event) {
         }).map(el => {
             return {
                 id: Number.parseInt(el.getElementsByTagName('series_animedb_id')[0].textContent),
-                name: el.getElementsByTagName('series_title')[0].textContent
+                name: el.getElementsByTagName('series_title')[0].textContent,
+                mediaType: el.getElementsByTagName('series_type')[0].textContent
             }
         })
         spinnerControl.checked = false
@@ -65,7 +66,9 @@ async function submit() {
 }
 
 async function startOpeningsTest(titles) {
-    titles = titles.map((a) => ({ sortKey: Math.random(), value: a }))
+    titles = titles
+        .filter(a => a.mediaType == 'TV')
+        .map((a) => ({ sortKey: Math.random(), value: a }))
         .sort((a, b) => a.sortKey - b.sortKey)
         .map(a => a.value)
 
@@ -124,7 +127,8 @@ async function startOpeningsTest(titles) {
 }
 
 async function startCharactersTest(titles) {
-    titles = titles.map((a) => ({ sortKey: Math.random(), value: a }))
+    titles = titles
+        .map((a) => ({ sortKey: Math.random(), value: a }))
         .sort((a, b) => a.sortKey - b.sortKey)
         .map(a => a.value)
 
