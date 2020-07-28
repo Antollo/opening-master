@@ -4,11 +4,15 @@ Wanna play? [opening-master.herokuapp.com](https://opening-master.herokuapp.com/
 
 ## Description
 
-The idea for this app was born when YouTube recommended me anime openings quiz.
-I didn't know some of the ones marked as easy (because I didn't watch these animes) but I knew
-a bunch of openings marked as hard. I came to conclusion that there are no easy and hard ones, there
-are those you have listened to and the rest. Then I created this app that knows what you have
-watched and makes a personalized quiz.
+The idea for this app was born when YouTube recommended me anime openings quiz. 
+I didn't know some of the ones marked as easy (because I didn't watch these animes) 
+but I knew a bunch of openings marked as hard. I came to conclusion that there are 
+no easy and hard ones, there are those you have listened to and the rest. Then I 
+created this app that knows what you have watched and makes a personalized quiz. 
+After half a year, I came across a weeb Discord bot. One of its features was 
+a waifu quiz. No one was able to guess anything because the quiz wasn't personalized. 
+However, a personalized anime character quiz would be a great idea, so I added 
+such a quiz to this app. Now I can't guess the characters I should know.
 
 ## Requirements
 

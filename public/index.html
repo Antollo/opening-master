@@ -4,13 +4,94 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Anime openings quiz app.">
+    <meta name="description" content="Anime quiz app.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
     <title>Opening master</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mini.css/3.0.1/mini-default.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    <style>
+        body {
+            --audio-height: 54px;
+            --universal-border-radius: 8px;
+        }
+    
+        @-moz-document url-prefix() {
+            body {
+                --audio-height: 40px !important;
+            }
+        }
+    
+        .collapse-section-label {
+            height: calc(var(--audio-height) - 2 * 1.5 * var(--universal-padding)) !important;
+            line-height: calc(var(--audio-height) - 2 * 1.5 * var(--universal-padding)) !important;
+            border: none !important;
+        }
+    
+        :focus {
+            outline: 0;
+        }
+    
+        audio,
+        #audioHolder {
+            height: var(--audio-height);
+            background-color: var(--collapse-label-back-color);
+            border-radius: var(--universal-border-radius);
+        }
+
+        #imageHolder {
+            box-sizing: border-box;
+        }
+
+        #image {
+            border-radius: var(--universal-border-radius);
+        }
+    
+        audio::-webkit-media-controls-panel {
+            background-color: var(--collapse-label-back-color);
+        }
+    
+        input[type="text"] {
+            margin: 8px;
+        }
+    
+        @media (min-width: 750px) {
+            .modal-card {
+                max-width: 50vw !important;
+            }
+        }
+    
+        @media (max-width: 750px) {
+            .modal-card {
+                max-width: calc(100vw - 4*var(--universal-padding)) !important;
+            }
+        }
+    
+        .modal-card {
+            max-height: calc(100vh - 4*var(--universal-padding)) !important;
+        }
+    
+        .modal-card-content {
+            max-height: calc(100vh - 4*var(--universal-padding) - 200px) !important;
+            overflow-y: auto;
+        }
+    
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        legend {
+            font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
+        }
+    
+        html,
+        * {
+            font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
+        }
+    </style>
 </head>
 
 <body>
@@ -36,11 +117,16 @@
             <div class="section">
                 <h2 class="doc">About this app</h2>
                 <p class="doc modal-card-content ">
-                    The idea for this app was born when YouTube recommended me anime openings quiz. I didn't
-                    know some of the ones marked as easy (because I didn't watch these animes) but I knew a bunch of
-                    openings marked as hard. I came to conclusion that there are no easy and hard ones, there are those
-                    you have listened to and the rest. Then I created this app that knows what you have watched and
-                    makes a personalized quiz.
+                    The idea for this app was born when YouTube recommended me anime opening quiz. 
+                    I didn't know some of the ones marked as easy (because I didn't watch these animes) 
+                    but I knew a bunch of openings marked as hard. I came to conclusion that there are 
+                    no easy and hard ones, there are those you have listened to and the rest. Then I 
+                    created this app that knows what you have watched and makes a personalized quiz. 
+                    After half a year, I came across a weeb Discord bot. One of its features was 
+                    a waifu quiz. No one was able to guess anything because the quiz wasn't personalized. 
+                    However, a personalized anime character quiz would be a great idea, so I added 
+                    such a quiz to this app. Now I can't guess the characters I should know.
+
                 </p>
                 <p>
                     You can see the source of this app at: <button class="small" style="margin: 0;"
@@ -55,13 +141,21 @@
             <div class="col-sm" id="app">
                 <h3>Welcome dear weeb!</h3>
                 <p>
-                    This app will test how well do you know openings of anime shows you have watched.
+                    This app will test how well do you know openings and characters of anime shows you have watched.
                 </p>
                 <p>
                     Have fun!
                 </p>
 
                 <form id="form">
+                    <div class="row">
+                        <input type="radio" id="openings-test-radio" name="testType" value="openings-test" checked>
+                        <label for="openings-test-radio">Opening quiz</label>
+                    </div>
+                    <div class="row">
+                        <input type="radio" id="characters-test-radio" name="testType" value="characters-test">
+                        <label for="characters-test-radio">Character quiz <mark class="primary">new</mark></label>
+                    </div>
                     <fieldset>
                         <legend>Import data from My Anime List using username</legend>
                         <div class="row">
@@ -104,18 +198,21 @@
                             </div>
 
                             <div class="col-sm-12 col-md-6">
-                                <p class="audioHolder" style="display: flex; flex-grow: 1;">
+                                <p id="audioHolder" style="display: flex; flex-grow: 1;">
                                     <audio controls autoplay id="testAudio" style="display: flex; flex-grow: 1;">
                                         Your browser does not support the <code>audio</code> element.
                                     </audio>
+                                </p>
+                                <p id="imageHolder">
+                                    <img id="image" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQEAeAB4AAD/2wBDAAIBAQIBAQICAgICAgICAwUDAwMDAwYEBAMFBwYHBwcGBwcICQsJCAgKCAcHCg0KCgsMDAwMBwkODw0MDgsMDAz/2wBDAQICAgMDAwYDAwYMCAcIDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAz/wAARCAABAAEDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9/KKKKAP/2Q==">
                                 </p>
                             </div>
                         </div>
                         <div class="doc row">
 
                             <div class="col-sm-12 col-md-6">
-                                <label for="testTitle">Anime title</label>
-                                <input type="text" id="testTitle" name="testTitle" placeholder="Title" />
+                                <label for="testInput" id="testInputLabel">Placeholder</label>
+                                <input type="text" id="testInput" name="testInput" placeholder="Placeholder" />
                             </div>
 
                             <div class="col-sm-12 col-md-6">
@@ -133,80 +230,5 @@
     </footer>
 </body>
 
-<script type="module" src="app.js"></script>
-<style>
-    body {
-        --audio-height: 54px;
-        --universal-border-radius: 8px;
-    }
-
-    @-moz-document url-prefix() {
-        body {
-            --audio-height: 40px !important;
-        }
-    }
-
-    .collapse-section-label {
-        height: calc(var(--audio-height) - 2 * 1.5 * var(--universal-padding)) !important;
-        line-height: calc(var(--audio-height) - 2 * 1.5 * var(--universal-padding)) !important;
-        border: none !important;
-    }
-
-    :focus {
-        outline: 0;
-    }
-
-    audio,
-    .audioHolder {
-        height: var(--audio-height);
-        background-color: var(--collapse-label-back-color);
-        border-radius: var(--universal-border-radius);
-    }
-
-    audio::-webkit-media-controls-panel {
-        background-color: var(--collapse-label-back-color);
-    }
-
-    input[type="text"] {
-        margin: 8px;
-    }
-
-    @media (min-width: 750px) {
-        .modal-card {
-            max-width: 50vw !important;
-        }
-    }
-
-    @media (max-width: 750px) {
-        .modal-card {
-            max-width: calc(100vw - 4*var(--universal-padding)) !important;
-        }
-    }
-
-    .modal-card {
-        max-height: calc(100vh - 4*var(--universal-padding)) !important;
-    }
-
-    .modal-card-content {
-        max-height: calc(100vh - 4*var(--universal-padding) - 200px) !important;
-        overflow-y: auto;
-    }
-
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6,
-    legend {
-        font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
-    }
-
-    html,
-    * {
-        font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", Helvetica, sans-serif;
-    }
-</style>
-
-
+<script type="module" src="app.js" defer></script>
 </html>
