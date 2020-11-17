@@ -1,9 +1,22 @@
-const ytStream = require('youtube-audio-stream')
+const ytdl = require('ytdl-core')
+const FFmpeg = require('fluent-ffmpeg')
 const ytSearch = require('scrape-yt').search
 const { EventEmitter } = require('events')
 const eventEmitter = new EventEmitter()
 eventEmitter.setMaxListeners(64)
 let counter = 4
+
+function ytStream(uri) {
+    const video = ytdl(uri, {
+        quality: 'lowest',
+        highWaterMark: 134217728,
+        filter: 'audioonly'
+    })
+    const ffmpeg = new FFmpeg(video)
+    video.on('error', () => { })
+    ffmpeg.on('error', error => console.error(error))
+    return ffmpeg.format('mp3')
+}
 
 function filterSearchResults(results) {
     return results

@@ -17,8 +17,9 @@
         "mal-scraper": "^2.7.1",
         "path": "^0.12.7",
         "scrape-yt": "^1.4.1",
-        "youtube-audio-stream": "^0.3.6",
-        "youtube-search": "^1.1.4"
+        "youtube-search": "^1.1.4",
+        "ytdl-core": "^4.0.5",
+        "fluent-ffmpeg": "^2.1.2"
     },
     "devDependencies": {}
 }

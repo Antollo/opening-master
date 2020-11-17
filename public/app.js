@@ -99,7 +99,7 @@ async function startOpeningsTest(titles) {
             }
             setTimeout(() => {
                 resolve(true)
-            }, 6000)
+            }, 10000)
             testAudio.src = `/api/anime-opening/${encodeURIComponent(titles[i].name)}`
         })
         spinnerControl.checked = false

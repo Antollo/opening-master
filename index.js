@@ -3,7 +3,7 @@ const pathToFfmpeg = require('ffmpeg-static')
 const path = require('path')
 const app = express()
 
-process.env.PATH = `${process.env.PATH};${path.dirname(pathToFfmpeg)};`
+process.env.PATH = `${process.env.PATH}:${path.dirname(pathToFfmpeg)}`
 
 app.use(express.json())
 app.use('/', express.static(`${__dirname}/public`))
