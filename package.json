@@ -9,17 +9,16 @@
     "author": "Antoni Nowinowski",
     "license": "ISC",
     "dependencies": {
-        "axios": "^0.19.2",
-        "events": "^3.2.0",
+        "axios": "^0.21.1",
+        "events": "^3.3.0",
         "express": "^4.17.1",
-        "express-validator": "^6.6.0",
-        "ffmpeg-static": "^4.2.6",
-        "mal-scraper": "^2.7.1",
+        "express-validator": "^6.10.0",
+        "ffmpeg-static": "^4.3.0",
+        "fluent-ffmpeg": "^2.1.2",
+        "mal-scraper": "^2.11.3",
         "path": "^0.12.7",
         "scrape-yt": "^1.4.1",
-        "youtube-search": "^1.1.4",
-        "ytdl-core": "^4.0.5",
-        "fluent-ffmpeg": "^2.1.2"
-    },
-    "devDependencies": {}
+        "youtube-search": "^1.1.6",
+        "ytdl-core": "^4.5.0"
+    }
 }

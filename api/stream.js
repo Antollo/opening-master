@@ -2,6 +2,9 @@ const ytdl = require('ytdl-core')
 const FFmpeg = require('fluent-ffmpeg')
 const ytSearch = require('scrape-yt').search
 const { EventEmitter } = require('events')
+const pathToFfmpeg = require('ffmpeg-static')
+
+FFmpeg.setFfmpegPath(pathToFfmpeg)
 const eventEmitter = new EventEmitter()
 eventEmitter.setMaxListeners(64)
 let counter = 4
@@ -13,7 +16,7 @@ function ytStream(uri) {
         filter: 'audioonly'
     })
     const ffmpeg = new FFmpeg(video)
-    video.on('error', () => { })
+    video.on('error', error => console.error(error))
     ffmpeg.on('error', error => console.error(error))
     return ffmpeg.format('mp3')
 }

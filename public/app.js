@@ -133,7 +133,7 @@ async function startCharactersTest(titles) {
         .map(a => a.value)
 
     let correct = 0;
-    const characters = [''];
+    let characters = [''];
     testInput.placeholder = 'Name'
     testInputLabel.textContent = 'Character name'
     audioHolder.style.display = 'none'
@@ -147,9 +147,11 @@ async function startCharactersTest(titles) {
             characters.shift()
         if (i < titles.length) {
             const newCharacters = await animeCharacters(titles[i].id);
-            newCharacters.forEach(
-                character => characters.splice(i + Math.floor(Math.random() * (characters.length - i)), 0, character)
-            )
+            characters = characters
+                .concat(newCharacters)
+                .map((a, idx) => ({ sortKey: idx <= i ? idx : i + Math.random(), value: a }))
+                .sort((a, b) => a.sortKey - b.sortKey)
+                .map(a => a.value)
         }
 
         testHeader.textContent = `Question ${i + 1}`
